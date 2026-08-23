@@ -1,0 +1,28 @@
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [win, linux, linux-musl, osx]
+        architecture: [x64, arm64]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v7
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v6
+      with:
+        dotnet-version: 10.0
+    - name: Build
+      run: dotnet publish -c Release -r ${{ matrix.os }}-${{ matrix.architecture }} DesignSpoolerClientSimulator.csproj
+    - name: Upload
+      uses: actions/upload-artifact@v7
+      with:
+        name: DesignSpoolerClientSimulator-${{ matrix.os }}-${{ matrix.architecture }}
+        path: bin/Release/net10.0/${{ matrix.os }}-${{ matrix.architecture }}/publish/DesignSpoolerClientSimulator*
