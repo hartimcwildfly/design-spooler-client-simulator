@@ -2,6 +2,7 @@ using System.Buffers.Binary;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
+using DesignSpoolerClientSimulator.Resources;
 
 namespace DesignSpoolerClientSimulator;
 
@@ -22,7 +23,7 @@ public static class TcpStep
     {
         using var tcp = new TcpClient();
 
-        Console.WriteLine($"[tcp] connecting to {serverIp}:{options.TcpPort}");
+        Console.WriteLine(string.Format(Messages.TcpConnecting, serverIp, options.TcpPort));
         try
         {
             using var connectCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
@@ -31,45 +32,44 @@ public static class TcpStep
         }
         catch (Exception ex) when (ex is SocketException or OperationCanceledException)
         {
-            Console.WriteLine($"[tcp] FAIL - could not connect: {ex.Message}");
+            Console.WriteLine(string.Format(Messages.TcpConnectFail, ex.Message));
             return false;
         }
-        Console.WriteLine("[tcp] connected (port 9050 is open)");
+        Console.WriteLine(Messages.TcpConnected);
 
         await using var stream = tcp.GetStream();
 
         var hello = Frame.Build(0, [0, 0, 0, 1, 0, 0, 0, 3]);
-        Console.WriteLine($"[tcp] sending hello ({hello.Length} bytes, replay of pcap #10: version=1, command=3)");
+        Console.WriteLine(string.Format(Messages.TcpSendingHello, hello.Length));
         await stream.WriteAsync(hello, ct);
 
         var helloReply = await ReadFrameRawAsync(stream, options, ct);
         if (helloReply is null)
         {
-            Console.WriteLine("[tcp] FAIL - no reply to hello / connection closed");
+            Console.WriteLine(Messages.TcpNoHelloReply);
             return false;
         }
 
         if (helloReply.AsSpan().SequenceEqual(hello))
         {
-            Console.WriteLine("[tcp] hello echoed back unchanged, matches pcap #12 behaviour - OK");
+            Console.WriteLine(Messages.TcpHelloEchoOk);
         }
         else
         {
-            Console.WriteLine($"[tcp] hello reply differs from capture ({helloReply.Length} bytes): " +
-                               Convert.ToHexString(helloReply));
-            Console.WriteLine("[tcp] this may still be fine if the server intentionally speaks a newer/different protocol");
+            Console.WriteLine(string.Format(Messages.TcpHelloDiffers, helloReply.Length, Convert.ToHexString(helloReply)));
+            Console.WriteLine(Messages.TcpHelloDiffersNote);
         }
 
         var keyMsg = await ReadFrameRawAsync(stream, options, ct);
         if (keyMsg is null)
         {
-            Console.WriteLine("[tcp] FAIL - no public key message received / connection closed");
+            Console.WriteLine(Messages.TcpNoKeyMsg);
             return false;
         }
 
         if (!Frame.TryParse(keyMsg, out var keyFrame))
         {
-            Console.WriteLine("[tcp] FAIL - public key message is not a valid baadbeef frame");
+            Console.WriteLine(Messages.TcpKeyInvalidFrame);
             return false;
         }
 
@@ -79,13 +79,12 @@ public static class TcpStep
             rsa.ImportRSAPublicKey(keyFrame.Payload, out var bytesRead);
             var parameters = rsa.ExportParameters(false);
             var exponent = new System.Numerics.BigInteger(parameters.Exponent!, isUnsigned: true, isBigEndian: true);
-            Console.WriteLine($"[tcp] received valid RSA public key: {rsa.KeySize}-bit modulus, exponent={exponent} " +
-                               $"(matches shape of pcap #14, {bytesRead}/{keyFrame.Payload.Length} bytes parsed)");
+            Console.WriteLine(string.Format(Messages.TcpKeyOk, rsa.KeySize, exponent, bytesRead, keyFrame.Payload.Length));
         }
         catch (CryptographicException ex)
         {
-            Console.WriteLine($"[tcp] FAIL - could not parse RSA public key: {ex.Message}");
-            Console.WriteLine($"       payload ({keyFrame.Payload.Length} bytes): {Convert.ToHexString(keyFrame.Payload)}");
+            Console.WriteLine(string.Format(Messages.TcpKeyParseFail, ex.Message));
+            Console.WriteLine(string.Format(Messages.TcpKeyPayload, keyFrame.Payload.Length, Convert.ToHexString(keyFrame.Payload)));
             return false;
         }
 

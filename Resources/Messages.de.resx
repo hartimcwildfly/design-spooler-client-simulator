@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="AppTitle" xml:space="preserve">
+    <value>Client-Simulator für Stickmaschine</value>
+  </data>
+  <data name="AppSubtitle" xml:space="preserve">
+    <value>Wiederholt die Discovery-/Handshake-Sequenz aus Stickmaschine-successful-connection.pcapng</value>
+  </data>
+  <data name="DiscoveryFailAbort" xml:space="preserve">
+    <value>ERGEBNIS: FEHLGESCHLAGEN - Discovery hat nicht genau einen Server gefunden (siehe oben). Abbruch.</value>
+  </data>
+  <data name="DiscoverySkipped" xml:space="preserve">
+    <value>[discovery] übersprungen, verwende --server {0}</value>
+  </data>
+  <data name="TcpResultOk" xml:space="preserve">
+    <value>ERGEBNIS: TCP-Handshake sieht korrekt aus (Port offen, Hello gespiegelt, gültiger RSA-Schlüssel empfangen).</value>
+  </data>
+  <data name="TcpResultFail" xml:space="preserve">
+    <value>ERGEBNIS: FEHLGESCHLAGEN - TCP-Handshake entspricht nicht dem aufgezeichneten Verhalten.</value>
+  </data>
+  <data name="HeartbeatStarting" xml:space="preserve">
+    <value>[heartbeat] wiederholt Discovery-Bytes an {0}:{1} alle {2}s (Strg+C zum Beenden)</value>
+  </data>
+
+  <data name="HeartbeatReply" xml:space="preserve">
+    <value>[heartbeat #{0}] Antwort: {1} Bytes von {2}</value>
+  </data>
+  <data name="HeartbeatNoReply" xml:space="preserve">
+    <value>[heartbeat #{0}] keine Antwort (der Server antwortet möglicherweise nur einmal pro Sitzung, oder der Heartbeat wird nicht beantwortet - mit eigener Aufzeichnung abgleichen)</value>
+  </data>
+  <data name="HeartbeatStopped" xml:space="preserve">
+    <value>[heartbeat] gestoppt nach {0} Sondierung(en)</value>
+  </data>
+
+  <data name="TcpConnecting" xml:space="preserve">
+    <value>[tcp] verbinde mit {0}:{1}</value>
+  </data>
+  <data name="TcpConnectFail" xml:space="preserve">
+    <value>[tcp] FEHLGESCHLAGEN - Verbindung nicht möglich: {0}</value>
+  </data>
+  <data name="TcpConnected" xml:space="preserve">
+    <value>[tcp] verbunden (Port 9050 ist offen)</value>
+  </data>
+  <data name="TcpSendingHello" xml:space="preserve">
+    <value>[tcp] sende Hello ({0} Bytes, Wiederholung von pcap #10: version=1, command=3)</value>
+  </data>
+  <data name="TcpNoHelloReply" xml:space="preserve">
+    <value>[tcp] FEHLGESCHLAGEN - keine Antwort auf Hello / Verbindung geschlossen</value>
+  </data>
+  <data name="TcpHelloEchoOk" xml:space="preserve">
+    <value>[tcp] Hello wurde unverändert gespiegelt, entspricht dem Verhalten aus pcap #12 - OK</value>
+  </data>
+  <data name="TcpHelloDiffers" xml:space="preserve">
+    <value>[tcp] Hello-Antwort weicht von der Aufzeichnung ab ({0} Bytes): {1}</value>
+  </data>
+  <data name="TcpHelloDiffersNote" xml:space="preserve">
+    <value>[tcp] das kann trotzdem in Ordnung sein, falls der Server absichtlich ein neueres/anderes Protokoll spricht</value>
+  </data>
+  <data name="TcpNoKeyMsg" xml:space="preserve">
+    <value>[tcp] FEHLGESCHLAGEN - keine Public-Key-Nachricht empfangen / Verbindung geschlossen</value>
+  </data>
+  <data name="TcpKeyInvalidFrame" xml:space="preserve">
+    <value>[tcp] FEHLGESCHLAGEN - Public-Key-Nachricht ist kein gültiger baadbeef-Frame</value>
+  </data>
+  <data name="TcpKeyOk" xml:space="preserve">
+    <value>[tcp] gültiger RSA-Public-Key empfangen: {0}-Bit-Modulus, Exponent={1} (entspricht der Form von pcap #14, {2}/{3} Bytes geparst)</value>
+  </data>
+  <data name="TcpKeyParseFail" xml:space="preserve">
+    <value>[tcp] FEHLGESCHLAGEN - RSA-Public-Key konnte nicht geparst werden: {0}</value>
+  </data>
+  <data name="TcpKeyPayload" xml:space="preserve">
+    <value>       Payload ({0} Bytes): {1}</value>
+  </data>
+
+  <data name="DiscoverySending" xml:space="preserve">
+    <value>[discovery] sende {0}-Byte-Multicast-Anfrage an {1} von lokalem Port {2} (Wiederholung von pcap #4)</value>
+  </data>
+  <data name="DiscoveryResponse" xml:space="preserve">
+    <value>[discovery] Antwort: {0} Bytes von {1}</value>
+  </data>
+  <data name="DiscoveryAdditionalResponse" xml:space="preserve">
+    <value>[discovery] weitere {0}-Byte-Antwort von {1} (von diesem Server bereits erhalten, wird ignoriert)</value>
+  </data>
+  <data name="DiscoveryNoResponse" xml:space="preserve">
+    <value>[discovery] keine Antwort innerhalb von {0}s</value>
+  </data>
+  <data name="DiscoveryMultipleServers" xml:space="preserve">
+    <value>[discovery] FEHLER: {0} verschiedene Server haben auf die Discovery-Anfrage geantwortet: {1}. Es sollte genau ein DesignSpooler-Server im Netzwerk sein - auf ein übriggebliebenes/doppeltes Gerät prüfen.</value>
+  </data>
+  <data name="FrameInvalidHeader" xml:space="preserve">
+    <value>  -&gt; beginnt nicht mit einem gültigen baadbeef-Frame-Header!</value>
+  </data>
+  <data name="FrameOuterOk" xml:space="preserve">
+    <value>  -&gt; äußerer Header OK: msgType={0}, payloadLen={1}</value>
+  </data>
+  <data name="FrameInnerOk" xml:space="preserve">
+    <value>  -&gt; verschachtelter Header OK: msgType={0}, payloadLen={1} (verschlüsselt, Inhalt nicht entschlüsselbar)</value>
+  </data>
+
+  <data name="UnknownArgument" xml:space="preserve">
+    <value>Unbekanntes Argument: {0}</value>
+  </data>
+  <data name="Usage" xml:space="preserve">
+    <value>Verwendung: DesignSpoolerClientSimulator [optionen]
+
+  --server &lt;ip&gt;              UDP-Discovery überspringen, direkt mit dieser Server-IP verbinden.
+  --multicast-ip &lt;ip&gt;        Discovery-Multicast-Gruppe (Standard 234.5.6.7).
+  --multicast-port &lt;port&gt;    UDP-Port für Discovery/Heartbeat (Standard 4564).
+  --local-udp-port &lt;port&gt;    Lokaler UDP-Port für Discovery (Standard 3001, wie in der Aufzeichnung).
+  --tcp-port &lt;port&gt;          TCP-Steuerport des Servers (Standard 9050).
+  --discovery-timeout &lt;sek&gt;  Wartezeit auf eine Discovery-Antwort (Standard 5).
+  --discovery-settle &lt;sek&gt;   Nach der ersten Antwort, wie lange weiter auf einen
+                             zweiten/unerwünschten Server gewartet wird (Standard 0.75).
+  --heartbeat-interval &lt;sek&gt; Verzögerung zwischen Heartbeat-UDP-Paketen (Standard 2, wie in der Aufzeichnung).
+  --no-heartbeat             Kontinuierliche Heartbeat-Schleife nach dem Handshake überspringen.</value>
+  </data>
+</root>

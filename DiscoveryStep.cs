@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Sockets;
+using DesignSpoolerClientSimulator.Resources;
 
 namespace DesignSpoolerClientSimulator;
 
@@ -28,8 +29,7 @@ public static class DiscoveryStep
         var request = CapturedBytes.DiscoveryRequest;
         var target = new IPEndPoint(options.MulticastAddress, options.MulticastPort);
 
-        Console.WriteLine($"[discovery] sending {request.Length}-byte multicast request to {target} " +
-                           $"from local port {options.LocalUdpPort} (replay of pcap #4)");
+        Console.WriteLine(string.Format(Messages.DiscoverySending, request.Length, target, options.LocalUdpPort));
         await udp.SendAsync(request, target, ct);
 
         var responses = new Dictionary<IPAddress, UdpReceiveResult>();
@@ -62,27 +62,24 @@ public static class DiscoveryStep
             var addr = result.RemoteEndPoint.Address;
             if (responses.TryAdd(addr, result))
             {
-                Console.WriteLine($"[discovery] response: {result.Buffer.Length} bytes from {result.RemoteEndPoint}");
+                Console.WriteLine(string.Format(Messages.DiscoveryResponse, result.Buffer.Length, result.RemoteEndPoint));
                 DumpFrame(result.Buffer);
             }
             else
             {
-                Console.WriteLine($"[discovery] additional {result.Buffer.Length}-byte response from " +
-                                   $"{result.RemoteEndPoint} (already heard from this server, ignoring)");
+                Console.WriteLine(string.Format(Messages.DiscoveryAdditionalResponse, result.Buffer.Length, result.RemoteEndPoint));
             }
         }
 
         if (responses.Count == 0)
         {
-            Console.WriteLine($"[discovery] no response within {options.DiscoveryTimeout.TotalSeconds:0.#}s");
+            Console.WriteLine(string.Format(Messages.DiscoveryNoResponse, options.DiscoveryTimeout.TotalSeconds.ToString("0.#")));
             return null;
         }
 
         if (responses.Count > 1)
         {
-            Console.WriteLine($"[discovery] ERROR: {responses.Count} different servers responded to the discovery " +
-                               $"request: {string.Join(", ", responses.Keys)}. There should be exactly one " +
-                               "DesignSpooler server on the network - check for a leftover/duplicate instance.");
+            Console.WriteLine(string.Format(Messages.DiscoveryMultipleServers, responses.Count, string.Join(", ", responses.Keys)));
             return null;
         }
 
@@ -93,16 +90,15 @@ public static class DiscoveryStep
     {
         if (!Frame.TryParse(data, out var outer))
         {
-            Console.WriteLine("  -> does not start with a valid baadbeef frame header!");
+            Console.WriteLine(Messages.FrameInvalidHeader);
             return;
         }
 
-        Console.WriteLine($"  -> outer header OK: msgType={outer.MsgType}, payloadLen={outer.Payload.Length}");
+        Console.WriteLine(string.Format(Messages.FrameOuterOk, outer.MsgType, outer.Payload.Length));
 
         if (Frame.TryParse(outer.Payload, out var inner))
         {
-            Console.WriteLine($"  -> nested header OK: msgType={inner.MsgType}, payloadLen={inner.Payload.Length} " +
-                               "(encrypted, contents not decodable)");
+            Console.WriteLine(string.Format(Messages.FrameInnerOk, inner.MsgType, inner.Payload.Length));
         }
     }
 }

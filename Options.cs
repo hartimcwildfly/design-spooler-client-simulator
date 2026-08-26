@@ -1,4 +1,5 @@
 using System.Net;
+using DesignSpoolerClientSimulator.Resources;
 
 namespace DesignSpoolerClientSimulator;
 
@@ -55,7 +56,7 @@ public sealed class Options
                     PrintUsage();
                     return null;
                 default:
-                    Console.Error.WriteLine($"Unknown argument: {args[i]}");
+                    Console.Error.WriteLine(string.Format(Messages.UnknownArgument, args[i]));
                     PrintUsage();
                     return null;
             }
@@ -66,19 +67,6 @@ public sealed class Options
 
     private static void PrintUsage()
     {
-        Console.WriteLine("""
-            Usage: DesignSpoolerClientSimulator [options]
-
-              --server <ip>              Skip UDP discovery, connect straight to this server IP.
-              --multicast-ip <ip>        Discovery multicast group (default 234.5.6.7).
-              --multicast-port <port>    Discovery/heartbeat UDP port (default 4564).
-              --local-udp-port <port>    Local UDP port to bind for discovery (default 3001, as in the capture).
-              --tcp-port <port>          Server TCP control port (default 9050).
-              --discovery-timeout <sec>  How long to wait for a discovery reply (default 5).
-              --discovery-settle <sec>   After the first reply, how long to keep listening for a
-                                         second/rogue server before giving up (default 0.75).
-              --heartbeat-interval <sec> Delay between heartbeat UDP packets (default 2, as in the capture).
-              --no-heartbeat             Skip the continuous post-handshake heartbeat loop.
-            """);
+        Console.WriteLine(Messages.Usage);
     }
 }

@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Sockets;
+using DesignSpoolerClientSimulator.Resources;
 
 namespace DesignSpoolerClientSimulator;
 
@@ -37,11 +38,11 @@ public static class HeartbeatStep
                 try
                 {
                     var result = await udp.ReceiveAsync(timeoutCts.Token);
-                    Console.WriteLine($"[heartbeat #{count}] reply: {result.Buffer.Length} bytes from {result.RemoteEndPoint}");
+                    Console.WriteLine(string.Format(Messages.HeartbeatReply, count, result.Buffer.Length, result.RemoteEndPoint));
                 }
                 catch (OperationCanceledException) when (!ct.IsCancellationRequested)
                 {
-                    Console.WriteLine($"[heartbeat #{count}] no reply (server may only reply once per session, or heartbeat isn't answered - check against your own capture)");
+                    Console.WriteLine(string.Format(Messages.HeartbeatNoReply, count));
                 }
             }
         }
@@ -50,6 +51,6 @@ public static class HeartbeatStep
             // Ctrl+C - fall through
         }
 
-        Console.WriteLine($"[heartbeat] stopped after {count} probe(s)");
+        Console.WriteLine(string.Format(Messages.HeartbeatStopped, count));
     }
 }

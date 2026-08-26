@@ -2,12 +2,13 @@ using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using DesignSpoolerClientSimulator;
+using DesignSpoolerClientSimulator.Resources;
 
 var options = Options.Parse(args);
 if (options is null) return 1;
 
-Console.WriteLine("Embroidery machine client simulator");
-Console.WriteLine("Replays the discovery/handshake sequence seen in Stickmaschine-successful-connection.pcapng");
+Console.WriteLine(Messages.AppTitle);
+Console.WriteLine(Messages.AppSubtitle);
 Console.WriteLine();
 
 using var cts = new CancellationTokenSource();
@@ -26,13 +27,13 @@ if (serverIp is null)
     if (serverIp is null)
     {
         Console.WriteLine();
-        Console.WriteLine("RESULT: FAIL - discovery did not find exactly one server (see above). Aborting.");
+        Console.WriteLine(Messages.DiscoveryFailAbort);
         return 1;
     }
 }
 else
 {
-    Console.WriteLine($"[discovery] skipped, using --server {serverIp}");
+    Console.WriteLine(string.Format(Messages.DiscoverySkipped, serverIp));
 }
 
 Console.WriteLine();
@@ -41,16 +42,14 @@ Console.WriteLine();
 var tcpOk = await TcpStep.RunAsync(serverIp, options, cts.Token);
 
 Console.WriteLine();
-Console.WriteLine(tcpOk
-    ? "RESULT: TCP handshake looks correct (port open, hello echoed, valid RSA key received)."
-    : "RESULT: FAIL - TCP handshake did not match the captured behaviour.");
+Console.WriteLine(tcpOk ? Messages.TcpResultOk : Messages.TcpResultFail);
 
 // ---- Step 3: optional UDP heartbeat loop ------------------------------------------------
 if (!options.NoHeartbeat)
 {
     Console.WriteLine();
-    Console.WriteLine($"[heartbeat] replaying discovery bytes to {serverIp}:{options.MulticastPort} every " +
-                       $"{options.HeartbeatInterval.TotalSeconds:0.#}s (Ctrl+C to stop)");
+    Console.WriteLine(string.Format(Messages.HeartbeatStarting, serverIp, options.MulticastPort,
+        options.HeartbeatInterval.TotalSeconds.ToString("0.#")));
     await HeartbeatStep.RunAsync(serverIp, options, cts.Token);
 }
 

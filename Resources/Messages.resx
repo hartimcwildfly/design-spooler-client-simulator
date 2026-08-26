@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="AppTitle" xml:space="preserve">
+    <value>Embroidery machine client simulator</value>
+  </data>
+  <data name="AppSubtitle" xml:space="preserve">
+    <value>Replays the discovery/handshake sequence seen in Stickmaschine-successful-connection.pcapng</value>
+  </data>
+  <data name="DiscoveryFailAbort" xml:space="preserve">
+    <value>RESULT: FAIL - discovery did not find exactly one server (see above). Aborting.</value>
+  </data>
+  <data name="DiscoverySkipped" xml:space="preserve">
+    <value>[discovery] skipped, using --server {0}</value>
+  </data>
+  <data name="TcpResultOk" xml:space="preserve">
+    <value>RESULT: TCP handshake looks correct (port open, hello echoed, valid RSA key received).</value>
+  </data>
+  <data name="TcpResultFail" xml:space="preserve">
+    <value>RESULT: FAIL - TCP handshake did not match the captured behaviour.</value>
+  </data>
+  <data name="HeartbeatStarting" xml:space="preserve">
+    <value>[heartbeat] replaying discovery bytes to {0}:{1} every {2}s (Ctrl+C to stop)</value>
+  </data>
+
+  <data name="HeartbeatReply" xml:space="preserve">
+    <value>[heartbeat #{0}] reply: {1} bytes from {2}</value>
+  </data>
+  <data name="HeartbeatNoReply" xml:space="preserve">
+    <value>[heartbeat #{0}] no reply (server may only reply once per session, or heartbeat isn't answered - check against your own capture)</value>
+  </data>
+  <data name="HeartbeatStopped" xml:space="preserve">
+    <value>[heartbeat] stopped after {0} probe(s)</value>
+  </data>
+
+  <data name="TcpConnecting" xml:space="preserve">
+    <value>[tcp] connecting to {0}:{1}</value>
+  </data>
+  <data name="TcpConnectFail" xml:space="preserve">
+    <value>[tcp] FAIL - could not connect: {0}</value>
+  </data>
+  <data name="TcpConnected" xml:space="preserve">
+    <value>[tcp] connected (port 9050 is open)</value>
+  </data>
+  <data name="TcpSendingHello" xml:space="preserve">
+    <value>[tcp] sending hello ({0} bytes, replay of pcap #10: version=1, command=3)</value>
+  </data>
+  <data name="TcpNoHelloReply" xml:space="preserve">
+    <value>[tcp] FAIL - no reply to hello / connection closed</value>
+  </data>
+  <data name="TcpHelloEchoOk" xml:space="preserve">
+    <value>[tcp] hello echoed back unchanged, matches pcap #12 behaviour - OK</value>
+  </data>
+  <data name="TcpHelloDiffers" xml:space="preserve">
+    <value>[tcp] hello reply differs from capture ({0} bytes): {1}</value>
+  </data>
+  <data name="TcpHelloDiffersNote" xml:space="preserve">
+    <value>[tcp] this may still be fine if the server intentionally speaks a newer/different protocol</value>
+  </data>
+  <data name="TcpNoKeyMsg" xml:space="preserve">
+    <value>[tcp] FAIL - no public key message received / connection closed</value>
+  </data>
+  <data name="TcpKeyInvalidFrame" xml:space="preserve">
+    <value>[tcp] FAIL - public key message is not a valid baadbeef frame</value>
+  </data>
+  <data name="TcpKeyOk" xml:space="preserve">
+    <value>[tcp] received valid RSA public key: {0}-bit modulus, exponent={1} (matches shape of pcap #14, {2}/{3} bytes parsed)</value>
+  </data>
+  <data name="TcpKeyParseFail" xml:space="preserve">
+    <value>[tcp] FAIL - could not parse RSA public key: {0}</value>
+  </data>
+  <data name="TcpKeyPayload" xml:space="preserve">
+    <value>       payload ({0} bytes): {1}</value>
+  </data>
+
+  <data name="DiscoverySending" xml:space="preserve">
+    <value>[discovery] sending {0}-byte multicast request to {1} from local port {2} (replay of pcap #4)</value>
+  </data>
+  <data name="DiscoveryResponse" xml:space="preserve">
+    <value>[discovery] response: {0} bytes from {1}</value>
+  </data>
+  <data name="DiscoveryAdditionalResponse" xml:space="preserve">
+    <value>[discovery] additional {0}-byte response from {1} (already heard from this server, ignoring)</value>
+  </data>
+  <data name="DiscoveryNoResponse" xml:space="preserve">
+    <value>[discovery] no response within {0}s</value>
+  </data>
+  <data name="DiscoveryMultipleServers" xml:space="preserve">
+    <value>[discovery] ERROR: {0} different servers responded to the discovery request: {1}. There should be exactly one DesignSpooler server on the network - check for a leftover/duplicate instance.</value>
+  </data>
+  <data name="FrameInvalidHeader" xml:space="preserve">
+    <value>  -&gt; does not start with a valid baadbeef frame header!</value>
+  </data>
+  <data name="FrameOuterOk" xml:space="preserve">
+    <value>  -&gt; outer header OK: msgType={0}, payloadLen={1}</value>
+  </data>
+  <data name="FrameInnerOk" xml:space="preserve">
+    <value>  -&gt; nested header OK: msgType={0}, payloadLen={1} (encrypted, contents not decodable)</value>
+  </data>
+
+  <data name="UnknownArgument" xml:space="preserve">
+    <value>Unknown argument: {0}</value>
+  </data>
+  <data name="Usage" xml:space="preserve">
+    <value>Usage: DesignSpoolerClientSimulator [options]
+
+  --server &lt;ip&gt;              Skip UDP discovery, connect straight to this server IP.
+  --multicast-ip &lt;ip&gt;        Discovery multicast group (default 234.5.6.7).
+  --multicast-port &lt;port&gt;    Discovery/heartbeat UDP port (default 4564).
+  --local-udp-port &lt;port&gt;    Local UDP port to bind for discovery (default 3001, as in the capture).
+  --tcp-port &lt;port&gt;          Server TCP control port (default 9050).
+  --discovery-timeout &lt;sec&gt;  How long to wait for a discovery reply (default 5).
+  --discovery-settle &lt;sec&gt;   After the first reply, how long to keep listening for a
+                             second/rogue server before giving up (default 0.75).
+  --heartbeat-interval &lt;sec&gt; Delay between heartbeat UDP packets (default 2, as in the capture).
+  --no-heartbeat             Skip the continuous post-handshake heartbeat loop.</value>
+  </data>
+</root>
