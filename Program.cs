@@ -5,7 +5,13 @@ using DesignSpoolerClientSimulator;
 using DesignSpoolerClientSimulator.Resources;
 
 var options = Options.Parse(args);
-if (options is null) return 1;
+if (options is null)
+{
+    Console.WriteLine();
+    Console.WriteLine(Messages.PressAnyKeyToExit);
+    Console.ReadKey();
+    return 1;
+}
 
 Console.WriteLine(Messages.AppTitle);
 Console.WriteLine(Messages.AppSubtitle);
@@ -28,6 +34,9 @@ if (serverIp is null)
     {
         Console.WriteLine();
         Console.WriteLine(Messages.DiscoveryFailAbort);
+        Console.WriteLine();
+        Console.WriteLine(Messages.PressAnyKeyToExit);
+        Console.ReadKey();
         return 1;
     }
 }
@@ -51,6 +60,12 @@ if (!options.NoHeartbeat)
     Console.WriteLine(string.Format(Messages.HeartbeatStarting, serverIp, options.MulticastPort,
         options.HeartbeatInterval.TotalSeconds.ToString("0.#")));
     await HeartbeatStep.RunAsync(serverIp, options, cts.Token);
+}
+else
+{
+    Console.WriteLine();
+    Console.WriteLine(Messages.PressAnyKeyToExit);
+    Console.ReadKey();
 }
 
 return tcpOk ? 0 : 1;

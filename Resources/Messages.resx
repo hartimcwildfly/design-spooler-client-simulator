@@ -22,6 +22,9 @@
   <data name="DiscoveryFailAbort" xml:space="preserve">
     <value>RESULT: FAIL - discovery did not find exactly one server (see above). Aborting.</value>
   </data>
+  <data name="PressAnyKeyToExit" xml:space="preserve">
+    <value>Press any key to exit...</value>
+  </data>
   <data name="DiscoverySkipped" xml:space="preserve">
     <value>[discovery] skipped, using --server {0}</value>
   </data>

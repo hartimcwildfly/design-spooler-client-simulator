@@ -22,6 +22,9 @@
   <data name="DiscoveryFailAbort" xml:space="preserve">
     <value>ERGEBNIS: FEHLGESCHLAGEN - Discovery hat nicht genau einen Server gefunden (siehe oben). Abbruch.</value>
   </data>
+  <data name="PressAnyKeyToExit" xml:space="preserve">
+    <value>Beliebige Taste zum Beenden drücken...</value>
+  </data>
   <data name="DiscoverySkipped" xml:space="preserve">
     <value>[discovery] übersprungen, verwende --server {0}</value>
   </data>
