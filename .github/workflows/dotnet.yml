@@ -3,6 +3,7 @@ name: .NET
 on:
   push:
     branches: [ "main" ]
+    tags: [ "v*" ]
   pull_request:
     branches: [ "main" ]
 
@@ -26,3 +27,39 @@ jobs:
       with:
         name: DesignSpoolerClientSimulator-${{ matrix.os }}-${{ matrix.architecture }}
         path: bin/Release/net10.0/${{ matrix.os }}-${{ matrix.architecture }}/publish/DesignSpoolerClientSimulator*
+
+  installer:
+    needs: build
+    strategy:
+      matrix:
+        architecture: [x64, arm64]
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v7
+      with:
+        fetch-depth: 0
+    - name: Determine version
+      id: version
+      shell: bash
+      run: |
+        VERSION=$(git describe --tags --exact-match HEAD 2>/dev/null || git rev-parse --short HEAD)
+        echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+    - name: Download published binary
+      uses: actions/download-artifact@v6
+      with:
+        name: DesignSpoolerClientSimulator-win-${{ matrix.architecture }}
+        path: publish
+    - name: Install Inno Setup
+      run: choco install innosetup --no-progress -y
+    - name: Build installer
+      run: >
+        iscc
+        /DMyAppVersion="${{ steps.version.outputs.version }}"
+        /DArch="${{ matrix.architecture }}"
+        /DSourceDir="${{ github.workspace }}\publish"
+        installer\DesignSpoolerClientSimulator.iss
+    - name: Upload installer
+      uses: actions/upload-artifact@v7
+      with:
+        name: DesignSpoolerClientSimulator-Setup-win-${{ matrix.architecture }}
+        path: installer/Output/*.exe

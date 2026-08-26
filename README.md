@@ -89,6 +89,14 @@ win/linux/linux-musl/osx × x64/arm64. Download the artifact matching your
 platform from the workflow run and execute it directly — no .NET runtime
 required on the target machine.
 
+For Windows, the workflow also builds a `.exe` installer (via
+[Inno Setup](https://jrsoftware.org/isinfo.php), see `installer/`) for
+x64/arm64, published as the `DesignSpoolerClientSimulator-Setup-win-*`
+artifacts. It installs to `Program Files`, adds a Start Menu entry and a
+normal "Programs and Features" uninstall entry, and supports silent
+installs (`Setup.exe /VERYSILENT /SUPPRESSMSGBOXES`) for software
+distribution tools that expect an installer rather than a raw binary.
+
 ## Limitations
 
 - **Only the outer framing is understood, not the encryption.** The payload
